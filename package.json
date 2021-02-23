@@ -1,0 +1,28 @@
+{
+  "name": "team-profile-generator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {
+    "inquirer": "^7.3.3",
+    "jest": "^26.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlishaSaleh/team-profile-generator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlishaSaleh/team-profile-generator/issues"
+  },
+  "homepage": "https://github.com/AlishaSaleh/team-profile-generator#readme"
+}
