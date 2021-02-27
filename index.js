@@ -23,7 +23,7 @@ addTeamMenu = () => {
             addIntern();
         } else {
             const html = generateHTML();
-            fs.writeFile('team.html', html, err =>
+            fs.writeFile('./dist/team.html', html, err =>
                 err ? console.log(err) : console.log('Success! Your HTML file has been generated!')
             );
             console.log(finalTeam);
@@ -149,7 +149,7 @@ generateHTML = () => {
       <br>
       <section>
           <div class="row d-flex justify-content-center">`
-    let htmlCARDS = addCards();
+    let htmlCARDS = addCards(finalTeam);
 
     htmlMain += htmlCARDS;
 
@@ -162,23 +162,61 @@ generateHTML = () => {
     return htmlMain;
 }
 
-addCards = () => {
+addCards = (data) => {
+    const htmlArr = [];
+    for (let i = 0; i < data.length; i++) {
 
-    return `<div class="col-md-3">
-    <div class="card bg-primary mx-4">
+        let modCard = `<div class="col-md-3">
+    <div class="card bg-primary m-4">
         <div class="card-body">
             <div class="card-title text-white">
-                <h3>person 1</h3>
-                <h5>Manager</h5>
-            </div>
+                <h3>${data[i].name}</h3>`
+        if (data[i].officeNumber) {
+            modCard += `
+                    <h5>Manager</h5>
+                    `
+        }
+        if (data[i].github) {
+            modCard += `
+                    <h5>Engineer</h5>
+                    `
+        }
+        if (data[i].school) {
+            modCard += `
+                    <h5>Intern</h5>
+                    `
+        } modCard +=
+            ` </div>
             <ul class="list-group">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">spec </li>
-            </ul>
+                <li class="list-group-item">ID: ${data[i].id}</li>
+                <li class="list-group-item">Email: <a href="mailto:${data[i].email}">${data[i].email}</a></li>
+                `
+        if (data[i].officeNumber) {
+            modCard += `
+                    <li class="list-group-item">Office: ${data[i].officeNumber} </li>
+                    `
+        }
+        if (data[i].github) {
+            modCard += `
+                    <li class="list-group-item">GitHub: <a href="https://github.com/${data[i].github}">${data[i].github}</a></li>
+                    `
+        }
+        if (data[i].school) {
+            modCard += `
+                    <li class="list-group-item">School: ${data[i].school}</li>
+                    `
+        }
+        modCard += `</ul>
         </div>
     </div>
 </div>`
+        // push to array 
+        htmlArr.push(modCard);
+    }
+    // console.log(htmlArr);
+    // return joined array
+    const htmlPlsWork = htmlArr.join("");
+    return htmlPlsWork;
 }
 
 init = () => {
