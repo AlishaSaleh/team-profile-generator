@@ -1,67 +1,132 @@
 // External packages needed for this application
 const fs = require('fs');
 const inquirer = require('inquirer');
+// Internal packages
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
+const finalTeam = [];
+
+addTeamMenu = () => {
+    inquirer.prompt(
+        {
+            type: 'list',
+            name: 'addMember',
+            message: 'Would you like to add more team members?',
+            choices: ['Yes, an Engineer', 'Yes, an Intern', 'No, my team is complete']
+        }
+    ).then((response) => {
+        if (response.addMember == 'Yes, an Engineer') {
+            addEngineer();
+        } else if (response.addMember == 'Yes, an Intern') {
+            addIntern();
+        } else {
+            const html = generateHTML();
+            fs.writeFile('team.html', html, err =>
+                err ? console.log(err) : console.log('Success! Your HTML file has been generated!')
+            );
+            console.log(finalTeam);
+        }
+    });
+};
+
+//add ADDMANAGER FUNCTION HERE
+addManager = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'managerName',
+            message: 'What is the name of the manager?'
+        }, {
+            type: 'input',
+            name: 'managerID',
+            message: 'What is the ID number of the manager?'
+        }, {
+            type: 'input',
+            name: 'managerEmail',
+            message: 'What is the email of the manager?'
+        }, {
+            type: 'input',
+            name: 'managerNum',
+            message: 'What is the office number of the manager?'
+        }
+    ]).then((response) => {
+        const nameMan = response.managerName;
+        const idMan = response.managerID;
+        const emailMan = response.managerEmail;
+        const numMan = response.managerNum;
+        const nuManager = new Manager(nameMan, idMan, emailMan, numMan);
+        finalTeam.push(nuManager);
+        addTeamMenu();
+
+    });
+};
 // Function for questions to add employees
-addEmployee = () => {
+addEngineer = () => {
     inquirer.prompt([
         {
             type: 'input',
             name: 'name',
-            message: 'What is the name of the employee?'
+            message: 'What is the name of the engineer?'
         }, {
             type: 'input',
             name: 'id',
-            message: 'What is the ID number of the employee?'
+            message: 'What is the ID number of the engineer?'
         }, {
             type: 'input',
             name: 'email',
-            message: 'What is the email of the employee?'
-        },
-        {
-            type: 'list',
-            name: 'employeeRole',
-            message: 'What is the role of the employee?',
-            choices: ['Manager', 'Engineer', 'Intern']
+            message: 'What is the email of the engineer?'
+        }, {
+            type: 'input',
+            name: 'github',
+            message: 'What is the GitHub username of the engineer?'
         }
-    ])
-        .then((response) => {
-            let roleSpec;
-            if (response.employeeRole == 'Manager') {
-                roleSpec = 'office number';
-            } else if (response.employeeRole == 'Engineer') {
-                roleSpec = 'GitHub username';
-            } else {
-                roleSpec = 'school name';
-            }
-            inquirer.prompt([
-                {
-                    type: 'input',
-                    name: 'roleSpec',
-                    message: `What is the team member's ${roleSpec}?`
-                }, {
-                    type: "list",
-                    name: "moreMembers",
-                    message: "Would you like to add more team members?",
-                    choices: ["yes", "no"],
-                }
-            ])
-                .then((response) => {
-                    if (response.moreMembers == 'yes') {
-                        addEmployee();
-                    } else {
-                        const html = generateHTML(response);
-                        fs.writeFile('team.html', html, err =>
-                            err ? console.log(err) : console.log('Success! Your HTML file has been generated!')
-                        );
+    ]).then((response) => {
+        // new Engineer
+        const nameEng = response.name;
+        const idEng = response.id;
+        const emailEng = response.email;
+        const githubEng = response.github;
+        const nuEngineer = new Engineer(nameEng, idEng, emailEng, githubEng);
+        finalTeam.push(nuEngineer);
+        addTeamMenu();
 
-                        // console.log('Ready for HTML!');
-                    }
-                })
-        })
+    })
 };
 
-generateHTML = (response) => {
+addIntern = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: 'What is the name of the intern?'
+        }, {
+            type: 'input',
+            name: 'id',
+            message: 'What is the ID number of the intern?'
+        }, {
+            type: 'input',
+            name: 'email',
+            message: 'What is the email of the intern?'
+        }, {
+            type: 'input',
+            name: 'school',
+            message: 'What is the school of the intern?'
+        }
+    ]).then((response) => {
+        // new Intern
+        const nameInt = response.name;
+        const idInt = response.id;
+        const emailInt = response.email;
+        const schoolInt = response.school;
+        const nuIntern = new Intern(nameInt, idInt, emailInt, schoolInt);
+        finalTeam.push(nuIntern);
+        addTeamMenu();
+    });
+}
+
+generateHTML = () => {
     let htmlMain = `<!DOCTYPE html>
   <html lang="en">
   
@@ -87,7 +152,7 @@ generateHTML = (response) => {
     let htmlCARDS = addCards();
 
     htmlMain += htmlCARDS;
-    
+
     let htmlBOTTOM = `</div>
   </section>
 </body>
@@ -98,6 +163,7 @@ generateHTML = (response) => {
 }
 
 addCards = () => {
+
     return `<div class="col-md-3">
     <div class="card bg-primary mx-4">
         <div class="card-body">
@@ -108,7 +174,7 @@ addCards = () => {
             <ul class="list-group">
                 <li class="list-group-item">Cras justo odio</li>
                 <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
+                <li class="list-group-item">spec </li>
             </ul>
         </div>
     </div>
@@ -116,7 +182,8 @@ addCards = () => {
 }
 
 init = () => {
-    addEmployee()
+    // CALL ADDMANAGER FUNCTION
+    addManager()
 };
 
-init()
+init();
