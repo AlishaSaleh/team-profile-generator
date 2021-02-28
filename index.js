@@ -6,8 +6,10 @@ const Manager = require('./lib/Manager');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 
+// An array that holds the data from each function/Class
 const finalTeam = [];
 
+// A function to hold the menu questions
 addTeamMenu = () => {
     inquirer.prompt(
         {
@@ -26,12 +28,12 @@ addTeamMenu = () => {
             fs.writeFile('./dist/team.html', html, err =>
                 err ? console.log(err) : console.log('Success! Your HTML file has been generated!')
             );
-            console.log(finalTeam);
+            // console.log(finalTeam);
         }
     });
 };
 
-//add ADDMANAGER FUNCTION HERE
+// A function to add Managers - runs first
 addManager = () => {
     inquirer.prompt([
         {
@@ -59,7 +61,6 @@ addManager = () => {
         const nuManager = new Manager(nameMan, idMan, emailMan, numMan);
         finalTeam.push(nuManager);
         addTeamMenu();
-
     });
 };
 // Function for questions to add employees
@@ -220,7 +221,7 @@ addCards = (data) => {
 }
 
 init = () => {
-    // CALL ADDMANAGER FUNCTION
+    // init() originally held multiple functions, now only calls 1 so could be removed
     addManager()
 };
 
